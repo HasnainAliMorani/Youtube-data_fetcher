@@ -23,13 +23,13 @@
             border-radius: 5px;
         }
         button {
-            background-color: #28a745;
+            background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
         }
         button:hover {
-            background-color: #218838;
+            background-color: #0056b3;
         }
         #videoDetails {
             margin-top: 20px;
@@ -49,6 +49,12 @@
             padding: 5px 10px;
             margin: 5px;
             font-size: 14px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -80,7 +86,7 @@
             }
 
             const apiKey = 'AIzaSyC3_e9gmXMH1bSpcJGKew1sk5Szs0y91Eo'; // Replace with your API key
-            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}&key=${apiKey}`;
+            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl);
@@ -90,21 +96,25 @@
                     const videoDetails = data.items[0];
                     const title = videoDetails.snippet.title;
                     const description = videoDetails.snippet.description;
-                    const views = videoDetails.statistics.viewCount;
-                    const likes = videoDetails.statistics.likeCount;
-                    const country = videoDetails.snippet.country || 'N/A'; // Country is not directly available in the video details
-                    const uploadDate = new Date(videoDetails.snippet.publishedAt).toLocaleString(); // Format the upload date
-                    const tags = videoDetails.snippet.tags || []; // Tags may not be available
+                    const thumbnailUrl = videoDetails.snippet.thumbnails.high.url;
+                    const tags = videoDetails.snippet.tags || [];
+                    const uploadDate = new Date(videoDetails.snippet.publishedAt).toLocaleString('en-PK', { timeZone: 'Asia/Karachi' }); // Convert to PKT
 
-                    document.getElementById('videoDetails').innerHTML = `
+                    // Fetch analytics data from your custom API
+                    const analyticsApiUrl = `yAIzaSyC3_e9gmXMH1bSpcJGKew1sk5Szs0y91Eo${videoId}`; // Replace with your analytics API endpoint
+                    const analyticsResponse = await fetch(analyticsApiUrl);
+                    const analyticsData = await analyticsResponse.json();
+
+                    const views = analyticsData.views || 'N/A';
+                    const likes = analyticsData.likes || 'N/A document.getElementById('videoDetails').innerHTML = `
                         <p><strong>Title:</strong> ${title}</p>
                         <p><strong>Description:</strong> ${description}</p>
+                        <p><strong>Upload Date (PKT):</strong> ${uploadDate}</p>
                         <p><strong>Views:</strong> ${views}</p>
                         <p><strong>Likes:</strong> ${likes}</p>
-                        <p><strong>Upload Date:</strong> ${uploadDate}</p>
-                        <p><strong>Country:</strong> ${country}</p>
                         <p><strong>Tags:</strong> ${tags.length > 0 ? tags.map(tag => `<span class="tag">${tag}</span>`).join('') : 'No tags available'}</p>
- `;
+                        <img src="${thumbnailUrl}" alt="Video Thumbnail">
+                    `;
                 } else {
                     document.getElementById('videoDetails').innerHTML = '<p>No video details found.</p>';
                 }
