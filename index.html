@@ -86,10 +86,7 @@
             }
 
             // Split the API key into parts for obfuscation
-            const part2 = 'AIzaSyC3_';
-            const part1 = 'e9gmXMH1bSpcJGK';
-            const part3 = 'ew1sk5Szs0y91Eo';
-            const apiKey = part2 + part1 + part3; // Concatenate parts
+            const apiKey = 'AIzaSyC3_e9gmXMH1bSpcJGKew1sk5Szs0y91Eo'; // Concatenate parts
 
             const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
 
@@ -105,20 +102,10 @@
                     const tags = videoDetails.snippet.tags || [];
                     const uploadDate = new Date(videoDetails.snippet.publishedAt).toLocaleString('en-PK', { timeZone: 'Asia/Karachi' }); // Convert to PKT
 
-                    // Fetch analytics data from your custom API
-                    const analyticsApiUrl = `YOUR_ANALYTICS_API_ENDPOINT/${videoId}`; // Replace with your analytics API endpoint
-                    const analyticsResponse = await fetch(analyticsApiUrl);
-                    const analyticsData = await analyticsResponse.json();
-
-                    const views = analyticsData.views || 'N/A';
-                    const likes = analyticsData.likes || 'N/A';
-
                     document.getElementById('videoDetails').innerHTML = `
                         <p><strong>Title:</strong> ${title}</p>
-                        <p><strong > Description:</strong> ${description}</p>
+                        <p><strong>Description:</strong> ${description}</p>
                         <p><strong>Upload Date (PKT):</strong> ${uploadDate}</p>
-                        <p><strong>Views:</strong> ${views}</p>
-                        <p><strong>Likes:</strong> ${likes}</p>
                         <p><strong>Tags:</strong> ${tags.length > 0 ? tags.map(tag => `<span class="tag">${tag}</span>`).join('') : 'No tags available'}</p>
                         <img src="${thumbnailUrl}" alt="Video Thumbnail">
                     `;
