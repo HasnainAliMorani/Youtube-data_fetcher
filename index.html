@@ -24,11 +24,14 @@
             border-radius: 5px;
             background-color: #1a1a1a;
             color: #eaeaea;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         input:focus, button:hover {
             border-color: #ffcc00;
             background-color: #1f1f1f;
             outline: none;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
         }
         #videoDetails {
             margin-top: 20px;
@@ -40,14 +43,6 @@
         }
         p {
             margin: 5px 0;
-        }
-        .tag {
-            display: inline-block;
-            background-color: #00ffcc;
-            border-radius: 3px;
-            padding: 5px 10px;
-            margin: 5px;
-            font-size: 14px;
         }
         img {
             max-width: 100%;
@@ -61,10 +56,12 @@
             color: #000;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
         }
         .download-btn:hover {
             background-color: #e6b800;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.5);
         }
     </style>
 </head>
@@ -77,6 +74,8 @@
     <div id="videoDetails">
         <!-- Video details will appear here -->
     </div>
+
+    <audio id="buttonSound" src="https://www.soundjay.com/button/sounds/button-3.mp3"></audio>
 
     <script>
         async function fetchVideoData() {
@@ -93,15 +92,7 @@
             if (!videoId) {
                 alert('Invalid YouTube URL. Please ensure it contains a valid video ID.');
                 return;
-            }
-
-            // Split the API key into parts for obfuscation
-            const part1 = 'AIzaSyC3_';
-            const part2 = 'e9gmXMH1bSpcJGK';
-            const part3 = 'ew1sk5Szs0y91Eo';
-            const apiKey = 'AIzaSyAvFNKhE4pEnDviNpORby3daHLhXuJ3uR8'; // Concatenate parts
-
-            const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}&key=${apiKey}`;
+            }const apiKey = 'AIzaSyCW4fZwrNkPVEk9MKU1IhLykg9oXQnk920';const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}&key=${apiKey}`;
 
             try {
                 const response = await fetch(apiUrl);
@@ -109,19 +100,19 @@
 
                 if (data.items && data.items.length > 0) {
                     const videoDetails = data.items[0];
-                    const title = videoDetails.snippet.title;
+                    const title = videoDetails.sn ippet.title;
                     const description = videoDetails.snippet.description;
                     const views = videoDetails.statistics.viewCount;
                     const likes = videoDetails.statistics.likeCount;
                     const thumbnailUrl = videoDetails.snippet.thumbnails.high.url;
 
-                    document.getElementById('videoDetails').innerHTML = ```html
-                        `<p><strong>Title:</strong> ${title}</p>
+                    document.getElementById('videoDetails').innerHTML = `
+                        <p><strong>Title:</strong> ${title}</p>
                         <p><strong>Description:</strong> ${description}</p>
                         <p><strong>Views:</strong> ${views}</p>
                         <p><strong>Likes:</strong> ${likes}</p>
                         <img src="${thumbnailUrl}" alt="Video Thumbnail">
-                        <button class="download-btn" onclick="downloadThumbnail('${thumbnailUrl}')">Download Thumbnail</button>
+                        <button class="download-btn" onclick="downloadThumbnail('${thumbnailUrl}'); playSound()">Download Thumbnail</button>
                     `;
                 } else {
                     document.getElementById('videoDetails').innerHTML = '<p>No video details found.</p>';
@@ -139,6 +130,12 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+        }
+
+        function playSound() {
+            const sound = document.getElementById('buttonSound');
+            sound.currentTime = 0; // Rewind to the start
+            sound.play();
         }
     </script>
 </body>
