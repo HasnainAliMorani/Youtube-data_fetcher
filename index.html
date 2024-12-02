@@ -56,20 +56,10 @@
             margin-top: 10px;
             box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
         }
-        .download-btn {
-            background-color: #ffcc00;
-            color: #000;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .download-btn:hover {
-            background-color: #e6b800;
-        }
     </style>
 </head>
 <body>
-    <h1>Saqlain Morani</h1>
+    <h1>YouTube Data Fetcher</h1>
     <input type="text" id="videoId" placeholder="Enter YouTube Video ID">
     <button onclick="fetchVideoDetails()">Fetch Video Details</button>
 
@@ -78,7 +68,7 @@
     <script>
         async function fetchVideoDetails() {
             const videoId = document.getElementById('videoId').value;
-            const apiKey = 'AIzaSyCW4fZwrNkPVEk9MKU1IhLykg9oXQnk920';
+            const apiKey = 'AIzaSyCW4fZwrNkPVEk9MKU1IhLykg9oXQnk920'; 
             const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&id=${videoId}&key=${apiKey}`;
 
             try {
@@ -96,20 +86,12 @@
                     const tags = videoDetails.snippet.tags || [];
                     const thumbnailUrl = videoDetails.snippet.thumbnails.high.url;
 
-                    // Fetch analytics data from your custom API
-                    const analyticsApiUrl = AIzaSyCW4fZwrNkPVEk9MKU1IhLykg9oXQnk920`/${videoId}`; // Replace with your analytics API endpoint
-                    const analyticsResponse = await fetch(analyticsApiUrl);
-                    const analyticsData = await analyticsResponse.json();
-
-                    const analyticsViews = analyticsData.views || 'N/A';
-                    const analyticsLikes = analyticsData.likes || 'N/A';
-
                     document.getElementById('videoDetails').innerHTML = `
                         <p><strong>Title:</strong> ${title}</p>
                         <p><strong>Description:</strong> ${description}</p>
-                        <p><strong>Upload Date (PKT):</strong> ${upload Date}</p>
-                        <p><strong>Views:</strong> ${analyticsViews}</p>
-                        <p><strong>Likes:</strong> ${analyticsLikes}</p>
+                        <p><strong>Upload Date (PKT):</strong> ${uploadDate}</p>
+                        <p><strong>Views:</strong> ${views}</p>
+                        <p><strong>Likes:</strong> ${likes}</p>
                         <p><strong>Country:</strong> ${country}</p>
                         <p><strong>Tags:</strong> ${tags.length > 0 ? tags.map(tag => `<span class="tag">${tag}</span>`).join('') : 'No tags available'}</p>
                         <img src="${thumbnailUrl}" alt="Video Thumbnail">
@@ -119,7 +101,7 @@
                 }
             } catch (error) {
                 console.error('Error fetching video details:', error);
-                document.getElementById('videoDetails').innerHTML = '<p>Error fetching video details.</p>';
+                document.getElementById('videoDetails').innerHTML = '<p>Error fetching video details. Please try again later.</p>';
             }
         }
     </script>
